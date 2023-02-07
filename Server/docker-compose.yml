@@ -1,0 +1,32 @@
+version: '2'
+services:
+  http_server:
+    build: ./http_server/.
+    links:
+      - redis
+    ports:
+      - 8888:8888
+    networks:
+      - helpdesk_network
+    depends_on:
+      - redis
+    volumes:
+      - /root/ssl:/ssl
+  websocket_server:
+    build: ./websocket_server/.
+    links:
+      - redis
+    ports:
+      - 2333:2333
+    networks:
+      - helpdesk_network
+    depends_on:
+      - redis
+  redis:
+    image: redis
+    networks:
+      - helpdesk_network
+    expose:
+      - 6379
+networks:
+  helpdesk_network: {}
